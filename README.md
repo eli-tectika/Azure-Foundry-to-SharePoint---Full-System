@@ -1395,11 +1395,11 @@ This section traces a single ACL entry end-to-end. It complements §14.3 (which 
                    │     deltashowsharingchanges)
                    ▼
 ┌──────────────────────────────────────────────────────────────────────────┐
-│ 2. Function App (permissions_sync.py)                                    │
-│    - _extract_user_ids() / _extract_group_ids() pull raw GUIDs from      │
+│ 2. Function App (PermissionsClient + PermissionMerger)                   │
+│    - FilePermissions.ExtractUserIds/ExtractGroupIds pull raw GUIDs from  │
 │      the Graph permission objects.                                       │
-│    - merge_permissions_for_search() applies the Purview RMS overlay      │
-│      when SYNC_PURVIEW_PROTECTION=true (intersection of SP + RMS).       │
+│    - PermissionMerger.MergePermissionsForSearch applies the Purview RMS  │
+│      overlay when SYNC_PURVIEW_PROTECTION=true (intersection of SP+RMS). │
 │    - Result: effective_user_ids[], effective_group_ids[].                │
 │    - Encoded as pipe-delimited strings (GUIDs can't contain '|').        │
 └──────────────────┬───────────────────────────────────────────────────────┘
@@ -1449,8 +1449,8 @@ The Function App never wants to re-enumerate the entire SharePoint drive on ever
 | Aspect | Value |
 |---|---|
 | Format | `{"delta_link": "<https-url-with-opaque-token>", "saved_at": "<ISO-timestamp>"}` |
-| Written by | [`blob_client.py` `save_delta_token()`](deployment/sharepoint-sync-func/blob_client.py#L491) |
-| Read by | [`blob_client.py` `load_delta_token()`](deployment/sharepoint-sync-func/blob_client.py#L465) |
+| Written by | [`BlobStorageClient.SaveDeltaTokenAsync`](deployment/sharepoint-sync-func/Clients/BlobStorageClient.cs) |
+| Read by | [`BlobStorageClient.LoadDeltaTokenAsync`](deployment/sharepoint-sync-func/Clients/BlobStorageClient.cs) |
 | Auth | Function App managed identity (Storage Blob Data Contributor) |
 | Lifetime | Survives cold starts, redeploys, scale-out — blob storage is the only persistent state plane for Flex Consumption |
 

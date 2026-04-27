@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
@@ -167,9 +168,18 @@ public sealed class SharePointClient : IAsyncDisposable
         else
         {
             var cleanPath = folderPath.Trim('/');
-            var pathItemId = $"root:/{cleanPath}:";
+            // Path-based driveItem addressing (root:/path:) requires the literal `:` and `/` chars.
+            // Kiota's level-1 URI template substitution percent-encodes them, so we override the
+            // URL with WithUrl() to preserve them. Per-segment Uri.EscapeDataString handles names
+            // with spaces, '#', etc. while keeping the segment separators intact.
+            var encodedPath = string.Join("/",
+                cleanPath.Split('/', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(Uri.EscapeDataString));
+            var folderUrl =
+                $"https://graph.microsoft.com/v1.0/drives/{DriveId}/root:/{encodedPath}:";
 
-            var folderItem = await _graph.Drives[DriveId].Items[pathItemId]
+            var folderItem = await _graph.Drives[DriveId].Items["root"]
+                .WithUrl(folderUrl)
                 .GetAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
             if (folderItem?.Id is null)
