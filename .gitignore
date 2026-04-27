@@ -1,0 +1,17 @@
+.DS_Store
+.env
+.env.*
+*.env
+!*.env.example
+.delta_tokens/
+__pycache__/
+*.pyc
+local.settings.json
+.sharepoint-sync-repo/
+deployment/.sharepoint-sync-repo/
+chat-context.md
+.chat-context.md
+azurevpnconfig-withcert.xml
+hub-vnet-foundry.AzureVpnProfile.xml
+*.env.bak
+*.drawio.bkp

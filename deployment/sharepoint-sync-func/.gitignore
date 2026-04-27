@@ -1,0 +1,21 @@
+# .NET build outputs
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Local settings (contains secrets)
+local.settings.json
+
+# Environment files
+.env
+.env.local
+
+# Delta token cache (graph_delta permissions mode)
+.delta_tokens/
+
+# OS / IDE files
+.DS_Store
+Thumbs.db
+*.swp
