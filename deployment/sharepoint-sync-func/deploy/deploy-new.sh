@@ -1,6 +1,6 @@
 #!/bin/bash
 # ─────────────────────────────────────────────────────────────────────────────
-# Create new Azure Function App and/or ACA Job for SharePoint sync (.NET 8).
+# Create new Azure Function App and/or ACA Job for SharePoint sync (.NET 10).
 # Resources get timestamped names so you can spin up disposable test instances.
 #
 # Usage:  TARGET={func|aca|both}  ./deploy-new.sh
@@ -120,7 +120,7 @@ if [[ "$TARGET" = "func" || "$TARGET" = "both" ]]; then
         --account-name "$FUNCTION_STORAGE_ACCOUNT" \
         --auth-mode login --output none
 
-    echo "[INFO] Creating function app (flex consumption, .NET 8 isolated)"
+    echo "[INFO] Creating function app (flex consumption, .NET 10 isolated)"
     az functionapp create \
         --name "$FUNCTION_APP_NAME" \
         --resource-group "$RESOURCE_GROUP" \
@@ -129,7 +129,7 @@ if [[ "$TARGET" = "func" || "$TARGET" = "both" ]]; then
         --deployment-storage-name "$FUNCTION_STORAGE_ACCOUNT" \
         --deployment-storage-container-name "$DEPLOY_CONTAINER" \
         --deployment-storage-auth-type SystemAssignedIdentity \
-        --runtime dotnet-isolated --runtime-version 8.0 \
+        --runtime dotnet-isolated --runtime-version 10.0 \
         --functions-version 4 --os-type Linux \
         --assign-identity '[system]' --output none
 
@@ -157,7 +157,7 @@ if [[ "$TARGET" = "func" || "$TARGET" = "both" ]]; then
         --settings "${APP_SETTINGS[@]}" "TIMER_SCHEDULE=$TIMER_SCHEDULE" "TIMER_SCHEDULE_FULL=$TIMER_SCHEDULE_FULL" \
         --output none
 
-    echo "[INFO] Publishing function code (.NET 8 isolated)"
+    echo "[INFO] Publishing function code (.NET 10 isolated)"
     cd "$SYNC_DIR"
     MAX_ATTEMPTS=5; ATTEMPT=1
     while true; do

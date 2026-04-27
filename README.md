@@ -1287,7 +1287,7 @@ This section explains exactly how the pipeline achieves (1), what it stores in t
  │                                                                         │
  │   ┌─────────────────────┐         ┌──────────────────────────────┐      │
  │   │ Azure Function App  │  2.     │ Blob container                │      │
- │   │  (.NET 8 isolated,  │ ───────▶│  sharepoint-sync              │      │
+ │   │  (.NET 10 isolated,  │ ───────▶│  sharepoint-sync              │      │
  │   │   Premium, VNet-    │  write  │  - one blob per SP file       │      │
  │   │   integrated)       │         │  - metadata:                   │      │
  │   │                     │         │     user_ids, group_ids        │      │
@@ -2137,7 +2137,7 @@ The script also assigns the necessary RBAC: Search MI → `Cognitive Services Us
 | Resource | Purpose | Network |
 |----------|---------|---------|
 | `func-subnet` (`10.100.6.0/24`) | Function App VNet integration | UDR → Firewall |
-| Azure Function App (Elastic Premium, .NET 8 isolated) | Runs the sync code on a schedule | VNet-integrated, managed identity |
+| Azure Function App (Elastic Premium, .NET 10 isolated) | Runs the sync code on a schedule | VNet-integrated, managed identity |
 | Function Storage Account | Function App internal storage | Private (blob + file PEs) |
 | Key Vault | Stores SPN secrets + AI Search key | Private (PE), RBAC-enabled |
 | Blob Container (`sharepoint-sync`) | Synced SharePoint files with metadata | In existing Foundry storage |

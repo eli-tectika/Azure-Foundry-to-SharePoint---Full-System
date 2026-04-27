@@ -9,7 +9,7 @@ set -euo pipefail
 #   2. Creates a Blob container for SharePoint sync in existing storage
 #   3. Creates Function App storage (with pre-created file share)
 #   4. Private Endpoints + DNS for FA storage
-#   5. Deploys Azure Function App (Flex Consumption, .NET 8 isolated, identity storage)
+#   5. Deploys Azure Function App (Flex Consumption, .NET 10 isolated, identity storage)
 #   6. Deploys Key Vault (private) with SPN secrets
 #   7. Configures Function App settings (KV refs + Search + OpenAI + ext-filter)
 #   8. Grants RBAC: Function App → Storage, Key Vault
@@ -620,7 +620,7 @@ else
       --resource-group "$SPOKE_RG" \
       --flexconsumption-location "$LOCATION" \
       --runtime dotnet-isolated \
-      --runtime-version 8.0 \
+      --runtime-version 10.0 \
       --storage-account "$FUNC_STORAGE_NAME" \
       --assign-identity "[system]" \
       --vnet "$SPOKE_VNET_NAME" \
@@ -1424,16 +1424,16 @@ az functionapp config appsettings delete \
   --setting-names SCM_DO_BUILD_DURING_DEPLOYMENT ENABLE_ORYX_BUILD \
   --output none 2>/dev/null || true
 
-# Stage a deploy package by publishing the .NET 8 isolated worker project
+# Stage a deploy package by publishing the .NET 10 isolated worker project
 PKG_DIR=$(mktemp -d -t sp-sync-pkg-XXXX)
 
 if ! command -v dotnet >/dev/null 2>&1; then
   echo "  ❌ dotnet SDK is required to publish the Function App."
-  echo "     Install the .NET 8 SDK: https://dotnet.microsoft.com/download"
+  echo "     Install the .NET 10 SDK: https://dotnet.microsoft.com/download"
   exit 1
 fi
 
-echo "  Publishing .NET 8 Function App project..."
+echo "  Publishing .NET 10 Function App project..."
 dotnet publish "$FUNC_SRC_DIR/SharePointSyncFunc.csproj" \
   -c Release -o "$PKG_DIR" /p:UseAppHost=false
 echo "  ✅ Published to $PKG_DIR"
@@ -1476,7 +1476,7 @@ fi
 
 echo "  Restarting Function App..."
 az functionapp restart -g "$SPOKE_RG" -n "$FUNC_APP_NAME" --output none
-echo "  ✅ Sync code deployed (Flex Consumption, .NET 8 isolated)"
+echo "  ✅ Sync code deployed (Flex Consumption, .NET 10 isolated)"
 echo ""
 
 ###############################################################################

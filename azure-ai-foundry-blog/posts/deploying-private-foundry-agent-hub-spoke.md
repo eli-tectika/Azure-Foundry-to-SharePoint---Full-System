@@ -332,7 +332,7 @@ The script handles 14 steps end-to-end:
 | 1 | Creates `func-subnet` with VNet integration delegation |
 | 2 | Creates blob container for SharePoint sync |
 | 3 | Creates Function App storage |
-| 4 | Deploys Function App (Elastic Premium, .NET 8 isolated, VNet-integrated) |
+| 4 | Deploys Function App (Elastic Premium, .NET 10 isolated, VNet-integrated) |
 | 5 | Locks down Function App storage (private endpoints) |
 | 6 | Deploys Key Vault (private) with SPN secrets |
 | 7 | Configures Function App settings |

@@ -1,7 +1,7 @@
 # Upstream source
 
 This folder originated from a vendored copy of the Microsoft sample repo and
-has since been **rewritten in .NET 8 (Azure Functions isolated worker)**. The
+has since been **rewritten in .NET 10 (Azure Functions isolated worker)**. The
 behavior, configuration surface, and external contracts (env vars, blob
 metadata keys, host.json schedules, deploy scripts) are kept identical to the
 upstream Python version.

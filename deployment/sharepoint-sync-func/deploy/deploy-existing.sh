@@ -1,6 +1,6 @@
 #!/bin/bash
 # ─────────────────────────────────────────────────────────────────────────────
-# Deploy sync code to an existing Azure Function App and/or ACA Job (.NET 8).
+# Deploy sync code to an existing Azure Function App and/or ACA Job (.NET 10).
 # Updates app settings + publishes code / rebuilds container image.
 #
 # Usage:  TARGET={func|aca|both}  ./deploy-existing.sh
@@ -114,7 +114,7 @@ if [[ "$TARGET" = "func" || "$TARGET" = "both" ]]; then
         --settings "${APP_SETTINGS[@]}" "TIMER_SCHEDULE=$TIMER_SCHEDULE" "TIMER_SCHEDULE_FULL=$TIMER_SCHEDULE_FULL" \
         --output none
 
-    echo "[INFO] Publishing code (.NET 8 isolated worker)"
+    echo "[INFO] Publishing code (.NET 10 isolated worker)"
     cd "$SYNC_DIR"
     func azure functionapp publish "$FUNCTION_APP_NAME" --dotnet-isolated
 

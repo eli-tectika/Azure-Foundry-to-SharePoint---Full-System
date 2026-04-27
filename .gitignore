@@ -15,3 +15,7 @@ azurevpnconfig-withcert.xml
 hub-vnet-foundry.AzureVpnProfile.xml
 *.env.bak
 *.drawio.bkp
+agent-tool/bin/
+agent-tool/obj/
+deployment/sharepoint-sync-func/bin/
+deployment/sharepoint-sync-func/obj/

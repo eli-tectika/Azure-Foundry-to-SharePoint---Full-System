@@ -1,6 +1,5 @@
 git
 gh
-dotnet-sdk-8.0
 dotnet-sdk-10.0
 azure-cli
 az-extension-containerapp

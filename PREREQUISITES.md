@@ -5,7 +5,7 @@ Azure. Install everything in this list in a single session, then verify with
 the **Verification** section at the bottom.
 
 The repository ships:
-- A .NET 8 Azure Functions isolated-worker project (`deployment/sharepoint-sync-func/`)
+- A .NET 10 Azure Functions isolated-worker project (`deployment/sharepoint-sync-func/`)
 - A .NET 10 console tool (`agent-tool/`) that creates / tests Foundry agents
 - Bicep templates for hub-spoke + Foundry resources (`bicep/`)
 - Bash deploy scripts (hub, spoke, sync) plus per-app deploy scripts under
@@ -59,10 +59,10 @@ sudo apt-get install -y \
   python3 python3-pip build-essential apt-transport-https
 ```
 
-#### .NET SDK 8 + .NET SDK 10 (both required)
+#### .NET SDK 10
 
-`SharePointSyncFunc.csproj` targets `net8.0` (LTS). `agent-tool/AgentTool.csproj`
-targets `net10.0`. Install both SDKs.
+Both projects (`SharePointSyncFunc.csproj` and `agent-tool/AgentTool.csproj`)
+target `net10.0` (LTS). One SDK covers both.
 
 ```bash
 # Microsoft package signing key + repo
@@ -70,8 +70,7 @@ wget https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.
 sudo dpkg -i /tmp/pmp.deb
 sudo apt-get update
 
-# Both SDKs side-by-side
-sudo apt-get install -y dotnet-sdk-8.0 dotnet-sdk-10.0
+sudo apt-get install -y dotnet-sdk-10.0
 ```
 
 #### Azure CLI
@@ -155,8 +154,7 @@ winget install --id Git.Git -e
 winget install --id GitHub.cli -e
 winget install --id Microsoft.VisualStudioCode -e
 
-# .NET SDKs (net8.0 LTS for the Function project + net10.0 for agent-tool)
-winget install --id Microsoft.DotNet.SDK.8 -e
+# .NET SDK 10 (both projects target net10.0)
 winget install --id Microsoft.DotNet.SDK.10 -e
 
 # Azure CLI
@@ -315,7 +313,7 @@ echo "--- Audit Function project for vulns/deprecation ---"
 ```
 
 Expected results:
-- `git`, `az`, `dotnet --list-sdks` shows **8.0.x** and **10.0.x**, `func`,
+- `git`, `az`, `dotnet --list-sdks` shows **10.0.x**, `func`,
   `python3`, `jq`, `zip`, `curl` all return versions.
 - `az account show` lists your active subscription.
 - `az extension list` includes `containerapp`.
@@ -354,8 +352,7 @@ TARGET=func ./deploy-existing.sh
 | Git Bash *(Option B alt.)* | latest | Bash on native Windows |
 | `git` | latest | Clone / push |
 | `gh` (optional) | latest | GitHub PRs/issues |
-| **.NET SDK 8.0** | LTS, latest patch | Builds `SharePointSyncFunc.csproj` |
-| **.NET SDK 10.0** | latest | Builds `agent-tool/AgentTool.csproj` |
+| **.NET SDK 10.0** | LTS, latest patch | Builds both `SharePointSyncFunc.csproj` and `agent-tool/AgentTool.csproj` |
 | **Azure CLI** (`az`) | 2.66+ | All `az` commands in deploy scripts |
 | `az` extension `containerapp` | latest | `az containerapp env/job ...` |
 | `az` extension `application-insights` | latest | Optional AI queries from scripts |

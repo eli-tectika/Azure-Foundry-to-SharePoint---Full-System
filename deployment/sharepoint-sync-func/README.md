@@ -1,6 +1,6 @@
-# SharePoint Sync Job (.NET 8 isolated worker)
+# SharePoint Sync Job (.NET 10 isolated worker)
 
-.NET 8 Azure Functions job that syncs files from a SharePoint document library to
+.NET 10 Azure Functions job that syncs files from a SharePoint document library to
 Azure Blob Storage using the Microsoft Graph delta API. Optionally exports
 SharePoint permissions as blob metadata for downstream ACL filtering, and
 integrates with Microsoft Purview to detect sensitivity labels and RMS

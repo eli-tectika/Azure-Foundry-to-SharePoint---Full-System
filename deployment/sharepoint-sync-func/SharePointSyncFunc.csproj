@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
     <OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -31,14 +31,14 @@
          Application Insights pipeline (host reads APPLICATIONINSIGHTS_CONNECTION_STRING). -->
     <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="2.50.0" />
 
-    <!-- Pinned: Microsoft.Extensions.* aligned to net8.0 LTS line.
+    <!-- Pinned: Microsoft.Extensions.* aligned to the net10.0 LTS line.
          Caching.Memory and Caching.Abstractions are listed explicitly to override
          the legacy 1.0.0 transitive pulled in by
          Microsoft.ApplicationInsights.PerfCounterCollector (an indirect dependency
          of Microsoft.Azure.Functions.Worker.ApplicationInsights). -->
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.7" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.7" />
   </ItemGroup>
 
   <ItemGroup>
