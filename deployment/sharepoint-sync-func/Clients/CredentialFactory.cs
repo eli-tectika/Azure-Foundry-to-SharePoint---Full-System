@@ -56,7 +56,10 @@ public static class CredentialFactory
         if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("IDENTITY_ENDPOINT")))
         {
             logger?.LogInformation("Using ManagedIdentityCredential for Blob Storage");
-            return new ManagedIdentityCredential();
+            // System-assigned managed identity. Azure.Identity 1.21+ deprecated the
+            // legacy (string clientId, TokenCredentialOptions) overload; we use the
+            // typed ManagedIdentityId factory instead.
+            return new ManagedIdentityCredential(ManagedIdentityId.SystemAssigned);
         }
 
         logger?.LogInformation("Using AzureCliCredential for Blob Storage");

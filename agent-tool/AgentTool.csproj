@@ -6,9 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Azure AI Foundry v2 SDK (PromptAgentDefinition / AzureAISearchTool / agentic
+         retrieval). These features only exist in the preview track; there is no
+         GA release of Azure.AI.Projects v2 yet. We pin to the latest preview
+         versions known to be compatible with the v2 Foundry agents API. -->
     <PackageReference Include="Azure.AI.Projects" Version="2.0.0-beta.1" />
     <PackageReference Include="Azure.AI.Projects.OpenAI" Version="2.0.0-beta.1" />
-    <PackageReference Include="Azure.Identity" Version="1.17.1" />
     <PackageReference Include="Azure.Search.Documents" Version="11.8.0-beta.1" />
+
+    <!-- Azure.Identity bumped to the latest stable (the previous 1.17.1 was flagged
+         as deprecated by the NuGet metadata; 1.21.0 clears that). -->
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
   </ItemGroup>
 </Project>

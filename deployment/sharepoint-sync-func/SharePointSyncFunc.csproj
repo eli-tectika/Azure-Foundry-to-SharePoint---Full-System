@@ -11,16 +11,34 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.13.1" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.22.2" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.2.0" />
+    <!-- Azure SDK -->
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.27.0" />
+
+    <!-- Microsoft Graph -->
+    <PackageReference Include="Microsoft.Graph" Version="5.104.0" />
+
+    <!-- Azure Functions isolated worker -->
+    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.52.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.7" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.3.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Timer" Version="4.3.1" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Graph" Version="5.65.0" />
+
+    <!-- Application Insights bridge for the isolated worker. The deprecated
+         Microsoft.ApplicationInsights.WorkerService 2.22.0 (legacy AI 2.x SDK) is
+         intentionally NOT used. Microsoft.Azure.Functions.Worker.ApplicationInsights
+         alone forwards worker-side ILogger output through the Functions host's
+         Application Insights pipeline (host reads APPLICATIONINSIGHTS_CONNECTION_STRING). -->
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="2.50.0" />
+
+    <!-- Pinned: Microsoft.Extensions.* aligned to net8.0 LTS line.
+         Caching.Memory and Caching.Abstractions are listed explicitly to override
+         the legacy 1.0.0 transitive pulled in by
+         Microsoft.ApplicationInsights.PerfCounterCollector (an indirect dependency
+         of Microsoft.Azure.Functions.Worker.ApplicationInsights). -->
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>

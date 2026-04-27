@@ -82,7 +82,7 @@ public sealed class BlobStorageClient : IAsyncDisposable
         _logger.LogInformation("Listing blobs (container={Container}, prefix={Prefix})", _containerName, prefix);
 
         await foreach (var blob in _containerClient
-            .GetBlobsAsync(BlobTraits.Metadata, prefix: prefix, cancellationToken: cancellationToken)
+            .GetBlobsAsync(BlobTraits.Metadata, BlobStates.None, prefix, cancellationToken)
             .ConfigureAwait(false))
         {
             if (blob.Name.EndsWith('/'))
@@ -236,7 +236,7 @@ public sealed class BlobStorageClient : IAsyncDisposable
         var prefix = directoryPath.TrimEnd('/') + "/";
         var blobsDeleted = 0;
         await foreach (var blob in _containerClient
-            .GetBlobsAsync(prefix: prefix, cancellationToken: cancellationToken)
+            .GetBlobsAsync(BlobTraits.None, BlobStates.None, prefix, cancellationToken)
             .ConfigureAwait(false))
         {
             try

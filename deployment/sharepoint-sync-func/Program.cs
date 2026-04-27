@@ -8,9 +8,12 @@ using SharePointSyncFunc.Services;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
-builder.Services
-    .AddApplicationInsightsTelemetryWorkerService()
-    .ConfigureFunctionsApplicationInsights();
+// Forward worker-side ILogger output through the Functions host's Application
+// Insights pipeline. The host reads APPLICATIONINSIGHTS_CONNECTION_STRING and does
+// the actual ingestion — no separate AI SDK package is needed here. The legacy
+// Microsoft.ApplicationInsights.WorkerService SDK was deprecated, so we don't
+// pull it in.
+builder.Services.ConfigureFunctionsApplicationInsights();
 
 builder.Services.AddSingleton<SyncConfig>(_ => SyncConfig.FromEnvironment());
 builder.Services.AddTransient<SyncOrchestrator>();
