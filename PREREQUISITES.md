@@ -64,13 +64,45 @@ sudo apt-get install -y \
 Both projects (`SharePointSyncFunc.csproj` and `agent-tool/AgentTool.csproj`)
 target `net10.0` (LTS). One SDK covers both.
 
-```bash
-# Microsoft package signing key + repo
-wget https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O /tmp/pmp.deb
-sudo dpkg -i /tmp/pmp.deb
-sudo apt-get update
+Ubuntu 24.04 ships .NET 10 in its native repo (Canonical-Microsoft
+collaboration), so no Microsoft signing key / `packages-microsoft-prod`
+repo is required:
 
+```bash
+sudo apt-get update
 sudo apt-get install -y dotnet-sdk-10.0
+```
+
+This installs to `/usr/lib/dotnet/`, links `/usr/bin/dotnet` into the
+default PATH for every shell, and brings:
+
+| Component | Version |
+|---|---|
+| SDK | `10.0.107` (feature band `100`, patch `7`) |
+| Runtime (`Microsoft.NETCore.App`) | `10.0.7` |
+| ASP.NET runtime (`Microsoft.AspNetCore.App`) | `10.0.7` |
+
+`requirements.txt` pins `dotnet-sdk==10.0.7` against the runtime
+version — `dotnet --list-runtimes` reports `10.0.7`, which is what most
+scanners check. If a scanner happens to compare against the SDK string,
+that's `10.0.107`.
+
+Verify after install:
+
+```bash
+dotnet --list-sdks       # expect 10.0.107 [/usr/lib/dotnet/sdk]
+dotnet --list-runtimes   # expect Microsoft.NETCore.App 10.0.7 + Microsoft.AspNetCore.App 10.0.7
+which dotnet             # expect /usr/bin/dotnet
+```
+
+If a previous .NET install is on the machine (e.g. snap-managed
+`/snap/dotnet-sdk` from an earlier setup, or a per-user `~/.dotnet`
+created via `dotnet-install.sh`), remove them so only the apt SDK
+remains and there is no PATH ambiguity:
+
+```bash
+sudo snap remove dotnet-sdk 2>/dev/null || true   # removes snap install if present
+rm -rf ~/.dotnet                                   # removes per-user install if present
 ```
 
 #### Azure CLI
@@ -313,7 +345,7 @@ echo "--- Audit Function project for vulns/deprecation ---"
 ```
 
 Expected results (versions must match section F):
-- `dotnet --list-sdks` shows **10.0.7**.
+- `dotnet --list-sdks` shows **10.0.107**, and `dotnet --list-runtimes` shows runtime **10.0.7** (the version `requirements.txt` pins).
 - `az --version` shows **azure-cli 2.85**.
 - `func --version` shows **4.9**.
 - `python3 --version` (or `python --version`) shows **3.14.4**.
