@@ -312,9 +312,13 @@ echo "--- Audit Function project for vulns/deprecation ---"
     && dotnet list package --deprecated --include-transitive )
 ```
 
-Expected results:
-- `git`, `az`, `dotnet --list-sdks` shows **10.0.x**, `func`,
-  `python3`, `jq`, `zip`, `curl` all return versions.
+Expected results (versions must match section F):
+- `dotnet --list-sdks` shows **10.0.7**.
+- `az --version` shows **azure-cli 2.85**.
+- `func --version` shows **4.9**.
+- `python3 --version` (or `python --version`) shows **3.14.4**.
+- `jq --version` shows **jq-1.8.1**.
+- `gh --version` shows **gh version 2.91**.
 - `az account show` lists your active subscription.
 - `az extension list` includes `containerapp`.
 - `dotnet build` finishes with **0 Warning(s) 0 Error(s)**.
@@ -345,24 +349,32 @@ TARGET=func ./deploy-existing.sh
 
 ## F. Software inventory (cheat sheet)
 
-| Tool | Version pin | Why |
-|------|-------------|-----|
-| Windows 10/11 64-bit | — | Host OS |
-| WSL2 + Ubuntu 24.04 *(Option A)* | latest | Linux env for bash deploy scripts |
-| Git Bash *(Option B alt.)* | latest | Bash on native Windows |
-| `git` | latest | Clone / push |
-| `gh` (optional) | latest | GitHub PRs/issues |
-| **.NET SDK 10.0** | LTS, latest patch | Builds both `SharePointSyncFunc.csproj` and `agent-tool/AgentTool.csproj` |
-| **Azure CLI** (`az`) | 2.66+ | All `az` commands in deploy scripts |
-| `az` extension `containerapp` | latest | `az containerapp env/job ...` |
-| `az` extension `application-insights` | latest | Optional AI queries from scripts |
-| **Azure Functions Core Tools** (`func`) | v4 latest | `func azure functionapp publish` |
-| Python 3 | 3.10+ | JSON-parsing helpers in deploy scripts |
-| `jq` | 1.6+ | JSON parsing in `bicep/*.sh` |
-| `zip` / `unzip` | any | `dotnet publish` artifact packaging |
-| `curl` | any | SCM `/api/publish` upload |
-| **Docker Desktop** *(only for ACA path)* | latest | `az acr build` / Dockerfile |
-| (any text editor — VS Code recommended) | — | Editing `.env` files |
+Primary toolchain (pinned versions, must match):
+
+| Tool Name | Version |
+|-----------|---------|
+| **.NET SDK** | **10.0.7** |
+| **Azure CLI** | **2.85** |
+| **Azure Functions Core Tools** | **4.9** |
+| **Python** | **3.14.4** |
+| **jq** (JSON parser) | **1.8.1** |
+| **GitHub CLI** | **2.91** |
+
+Supporting tools (provided by the host OS, WSL distribution, or Git for
+Windows — no explicit version pin):
+
+| Tool | Why |
+|------|-----|
+| Windows 10/11 64-bit | Host OS |
+| WSL2 + Ubuntu 24.04 *(Option A)* | Linux env for bash deploy scripts |
+| Git Bash *(Option B alt.)* | Bash on native Windows |
+| `git` | Clone / push (bundled with Git for Windows / WSL) |
+| `az` extension `containerapp` | `az containerapp env/job ...` (auto-installed) |
+| `az` extension `application-insights` | Optional AI queries from scripts |
+| `zip` / `unzip` | `dotnet publish` artifact packaging (bundled with WSL / Git Bash) |
+| `curl` / `wget` | SCM `/api/publish` upload (bundled with WSL / Git Bash) |
+| **Docker Desktop** *(only for ACA path)* | `az acr build` / Dockerfile |
+| (any text editor — VS Code recommended) | Editing `.env` files |
 
 The NuGet packages used by the .NET projects are pinned in their respective
 `.csproj` files. Both projects pass `dotnet list package --vulnerable
