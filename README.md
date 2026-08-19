@@ -76,15 +76,15 @@ Before talking about network options, you need to understand that Microsoft Foun
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Microsoft Foundry                            │
 │                                                                 │
-│  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐│
-│  │ 1. Foundry   │  │ 2. Foundry   │  │ 3. Agent Service       ││
-│  │    Portal    │  │    Resource  │  │    (compute that runs  ││
-│  │    (UI)      │  │    (APIs)    │  │     your agents)       ││
-│  └──────────────┘  └──────────────┘  └────────────────────────┘│
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
+│  │ 1. Foundry   │  │ 2. Foundry   │  │ 3. Agent Service       │ │
+│  │    Portal    │  │    Resource  │  │    (compute that runs  │ │
+│  │    (UI)      │  │    (APIs)    │  │     your agents)       │ │
+│  └──────────────┘  └──────────────┘  └────────────────────────┘ │
 │                                                                 │
 │  ┌─────────────────────────────────────────────────────────────┐│
-│  │ 4. Dependent Azure Resources                               ││
-│  │    (Storage, Cosmos DB, AI Search, Key Vault, OpenAI, etc.)││
+│  │ 4. Dependent Azure Resources                                ││
+│  │    (Storage, Cosmos DB, AI Search, Key Vault, OpenAI, etc.) ││
 │  └─────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -1283,16 +1283,16 @@ This section explains exactly how the pipeline achieves (1), what it stores in t
                                         │ 1. Graph API
                                         │    (HTTPS 443, via Azure FW)
                                         ▼
- ┌──────────────────────────── Spoke VNet ─────────────────────────────────┐
- │                                                                         │
- │   ┌─────────────────────┐         ┌──────────────────────────────┐      │
+ ┌──────────────────────────── Spoke VNet ──────────────────────────────────┐
+ │                                                                          │
+ │   ┌─────────────────────┐         ┌───────────────────────────────┐      │
  │   │ Azure Function App  │  2.     │ Blob container                │      │
- │   │  (.NET 10 isolated,  │ ───────▶│  sharepoint-sync              │      │
+ │   │  (.NET 10 isolated, │───────▶ │  sharepoint-sync              │      │
  │   │   Premium, VNet-    │  write  │  - one blob per SP file       │      │
- │   │   integrated)       │         │  - metadata:                   │      │
- │   │                     │         │     user_ids, group_ids        │      │
- │   │  Timer trigger      │         │     IsDeleted, purview_*       │      │
- │   │  every 1h           │         │     sharepoint_web_url         │      │
+ │   │   integrated)       │         │  - metadata:                  │      │
+ │   │                     │         │     user_ids, group_ids       │      │
+ │   │  Timer trigger      │         │     IsDeleted, purview_*      │      │
+ │   │  every 1h           │         │     sharepoint_web_url        │      │
  │   └─────────────────────┘         └──────────────┬────────────────┘      │
  │                                                  │ 3. Shared Private     │
  │                                                  │    Link (pull)        │
@@ -1313,7 +1313,7 @@ This section explains exactly how the pipeline achieves (1), what it stores in t
  │                                    │  → url_citation back to       │     │
  │                                    │    the SharePoint page        │     │
  │                                    └───────────────────────────────┘     │
- └─────────────────────────────────────────────────────────────────────────┘
+ └──────────────────────────────────────────────────────────────────────────┘
 ```
 
 Four logical stages: **(1) pull from SharePoint**, **(2) stage in Blob**, **(3) index into AI Search**, **(4) query from Foundry**. Every hop is private except the first one — which is why it has to go through the Azure Firewall with explicit FQDN allow rules (`*.sharepoint.com`, `graph.microsoft.com`, `login.microsoftonline.com`).
